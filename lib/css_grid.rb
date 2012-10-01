@@ -7,7 +7,7 @@ module GridHelper
   def grid element_class, options = Hash.new, &block
     html_id, html_class, offset = options.delete_many :id, :class, :offset
     offset = TWELVE_STRING_INTS.invert[offset] if offset.class == Fixnum
-
+    
     content_tag(:div, nil, :id => html_id, :class => "#{ element_class } #{ html_class } #{ "offset_#{ offset }" if offset }" , &block)
   end
 
