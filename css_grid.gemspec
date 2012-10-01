@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Thomas Petrachi"]
   gem.email         = ["thomas.petrachi@vodeclic.com"]
   gem.description   = %q{Provide CSS grid stylesheet, plus several helpers}
-  gem.summary       = %q{1140_grid.css and GridHelper module}
+  gem.summary       = %q{grid.css and GridHelper module}
   gem.homepage      = "https://github.com/petrachi/css_grid"
 
   gem.files         = `git ls-files`.split($\)
