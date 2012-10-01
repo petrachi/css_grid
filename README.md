@@ -47,8 +47,10 @@ app/helpers/application_helper.rb
 ### Css Grid Tags
 
 __Container__ is a full width div that allows layouts to have a background that spans the full width of the browser
+
 __Row__ is a row of columns. It centres them and defines the 1140px max-width.
-__span__ is the column, there are twelve classes to define the width for each column. Defined from 'one_span' to 'twelve_span'
+
+__Span__ is the column, there are twelve classes to define the width for each column. Defined from 'one_span' to 'twelve_span'
 
 There is some example of what you can do :
 ```html
@@ -99,7 +101,7 @@ You can call 'container', 'row' or '*_span' functions that create the correspond
 Code
 
 erb code
-```ruby
+```erb
 	<%= container do %>
 		<!-- some html -->
 	<% end %>
@@ -115,7 +117,7 @@ will produce
 You can pass specific html ids or class as arguments
 
 erb code
-```ruby
+```erb
 	<%= row :class=>:some_class do %>
 		<!-- some html -->
 	<% end %>
@@ -130,7 +132,7 @@ will produce
 
 --
 erb code
-```ruby
+```erb
 	<%= six_span :id=>:some_id, :class=>"class_one class_two" do %>
 		<!-- some html -->
 	<% end %>
@@ -146,7 +148,7 @@ will produce
 You can also pass 'offset' as an argument for the '*_span' helpers. Offset will slide the column to the left. (like you insert a empty *_span before)
 
 erb code
-```ruby
+```erb
 	<%= four_span :offset=>:two do %>
 		<!-- some html -->
 	<% end %>
@@ -161,7 +163,7 @@ will produce
 
 --
 erb code
-```ruby
+```erb
 	<%= four_span :offset=>2 do %>
 		<!-- some html -->
 	<% end %>
@@ -196,7 +198,7 @@ Imagine I have this yml file
 ```
 
 I can do in my view
-```ruby
+```erb
 	<%= two_col_container :collection=>[:array, :hash, :string] do |i18n_key| %>
 		<h2><%=t "#{ i18n_key }.name" %></h2>
 		<p><%=t "#{ i18n_key }.description" %></p>
@@ -231,7 +233,7 @@ So You can play easily with grid and your collections. Users.all for example ;)
 
 --
 If you just want to create a single row, you can just do 
-```ruby
+```erb
 	<%= four_col_row :collection=>[1, 2, 3, 4], :id=>:count_style do |i| %>
 		<p>count <%= i %></p>
 	<% end %>
@@ -275,7 +277,7 @@ I think this will be great, forms for example.
 ```
 
 by passing
-```ruby
+```erb
 	<%= twelve_col_container :collection=>[:email], :auto_span=>:disabled do |field| %>
 		<%= three_span{ label_tag field }%>
 		<%= nine_span{ text_field_tag field }%>
