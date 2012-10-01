@@ -1,6 +1,6 @@
 # CssGrid
 
-TODO: Write a gem description
+In Dev Gem, please, come back later.
 
 ## Installation
 
