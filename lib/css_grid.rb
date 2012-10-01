@@ -71,7 +71,7 @@ module CssGridHelper
       end
     end
     
-    def respond_to? method_name
+    def respond_to? method_name, include_private = false
       case method_name.to_s
       when  /^(container|row|(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_span)$/, 
             /^(one|two|three|four|six|twelve)_col_row$/,
