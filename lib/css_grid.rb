@@ -2,68 +2,123 @@ require "css_grid/version"
 require "css_grid/engine"
 
 module GridHelper
-  TWELVE_STRING_INTS = {:one => 1, :two => 2, :three => 3, :four => 4, :five => 5, :six => 6, :seven => 7, :eight => 8, :nine => 9, :ten => 10, :evelen => 11, :twelve => 12}
-
-  def grid element_class, options = Hash.new, &block
-    html_id, html_class, offset = options.delete_many :id, :class, :offset
-    offset = TWELVE_STRING_INTS.invert[offset] if offset.class == Fixnum
-    
-    content_tag(:div, nil, :id => html_id, :class => "#{ element_class } #{ html_class } #{ "offset_#{ offset }" if offset }" , &block)
+  TWELVE_STRING_INTS = { :one => 1, :two => 2, :three => 3, :four => 4, :five => 5, :six => 6, 
+                         :seven => 7, :eight => 8, :nine => 9, :ten => 10, :evelen => 11, :twelve => 12 }
+  TWELVE_STRING_INTS_INVERT = TWELVE_STRING_INTS.invert
+  
+  
+  GRID_CONFIG = { :classes => Hash.new{ |hash, key| hash[key] = key }, 
+                  :elements => Hash.new(:div).merge(:container => :section) }
+  
+  def initialize *args
+    @nested_stack = []
+    super
   end
-
-  def col col_number, options = Hash.new, &block
-    html_id, html_class, collection = options.delete_many :id, :class, :collection
-    collection ||= [1]
-
-    collection_length = TWELVE_STRING_INTS[col_number.to_sym]
-    span_width = TWELVE_STRING_INTS.invert[ 12 / collection_length ]
-
-    raise ArgumentError, "collection.size must be <= #{ collection_length }" if collection.size > collection_length
-
-    cols = collection.map do |elt|
-      eval %{
-        #{ span_width }_span do
-          capture(elt, &block)
-        end }
+  
+  def grid tag, options = {}, &block
+    prepend = TWELVE_STRING_INTS_INVERT[options.delete :prepend]
+    append = TWELVE_STRING_INTS_INVERT[options.delete :append]
+    
+    warn "WARNING : argument ':nested' is not supported for '#{ tag }'" if options[:nested].present? and tag != :row
+    
+    if tag =~ /(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_span$/
+        @nested_stack << $1
+        
+        unstack = true
+    else
+      warn "WARNING : argument ':prepend' is not supported for '#{ tag }'" if prepend.present?
+      warn "WARNING : argument ':append' is not supported for '#{ tag }'" if append.present?
+            
+      unstack = false
     end
-
-    row :id => html_id, :class => html_class do
-      cols.inject(ActiveSupport::SafeBuffer.new){ |buffer, col| buffer.safe_concat(col) }
-    end
+    
+    content_class = [GRID_CONFIG[:classes][tag], options.delete(:class)]
+    content_class << "#{ GRID_CONFIG[:classes][:prepend] }_#{ prepend }" if prepend
+    content_class << "#{ GRID_CONFIG[:classes][:append] }_#{ append }" if append
+    content_class << GRID_CONFIG[:classes][:nested] if options.delete(:nested)
+    
+    safe_buffer = content_tag(GRID_CONFIG[:elements][tag], nil, :id => options.delete(:id), :class => content_class.join(" ") , &block)
+    
+    @nested_stack.pop if unstack
+    safe_buffer
   end
 
   def recollect size, collection
-    recollected = Array.new
+    recollected = []
     0.step(collection.size - 1, size) do |i|
       recollected << collection[i..i + size - 1]
     end
     recollected
   end
-
-  def rows col_number, options = Hash.new, &block
-    html_id, html_class, collection = options.delete_many :id, :class, :collection    
-    collection ||= [1]
-
-    recollection_size = TWELVE_STRING_INTS[col_number.to_sym]
-
-    rows = recollect(recollection_size, collection).map do |collection_mini|
-      col col_number, {:collection => collection_mini}, &block
+  
+  def cols_container col_number, options = {}, &block
+    options[:rows] ||= {}
+    options[:spans] ||= {}
+    
+    if @nested_stack.present?
+      options[:rows].merge!({:nested => true})
+      options[:nested_width] ||= TWELVE_STRING_INTS[@nested_stack.last.to_sym]
     end
+        
+    disable = [*options.delete(:disable)]
+    nested = [*options.delete(:nested)]
+    
+    options[:rows].merge!({:nested => true}) if nested.delete :container    
+    
+    collection_length = TWELVE_STRING_INTS[col_number]
+    span_width = @span_width || TWELVE_STRING_INTS_INVERT[(options.delete(:nested_width) || 12) / (collection_length + (options[:spans][:prepend] || 0) + (options[:spans][:append] || 0))]
+    
+    rows = recollect(collection_length, options.delete(:collection) || [1]).map do |collection_mini|
+      cols = collection_mini.map do |elt|
 
-    container :id => html_id, :class => html_class do
-      rows.inject(ActiveSupport::SafeBuffer.new){ |buffer, col| buffer.safe_concat(col) }
+        if disable.include? :spans
+          capture(elt, &block)
+          
+        else
+          grid("#{ span_width }_span".to_sym, options[:spans].clone) do
+            safe_buffer = capture(elt, &block)
+            safe_buffer = grid(:row, :nested=>true){ safe_buffer } if nested.include? :spans
+            
+            safe_buffer
+          end
+        end
+      end
+      
+      grid(:row, options[:rows].clone){ cols.reduce(:safe_concat) }
     end
+    
+    safe_buffer = rows.reduce(:safe_concat)
+    safe_buffer = grid(:container, :id=>options.delete(:id), :class=>options.delete(:class)){ safe_buffer } unless disable.delete :container
+    safe_buffer
+  end
+  
+  def spans_container span_width, options = {}, &block
+    if @nested_stack.present?
+      options[:nested_width] ||= TWELVE_STRING_INTS[@nested_stack.last.to_sym]
+    end
+    
+    @span_width = span_width
+    col_number = TWELVE_STRING_INTS_INVERT[(options.delete(:nested_width) || 12) / TWELVE_STRING_INTS[span_width]]
+    
+    safe_buffer = cols_container col_number, options, &block
+    
+    @span_width = nil
+    safe_buffer
   end
   
   
+  def one_col_row options = {}, &block
+    cols_container :one, options.merge(:disable=>:container, :rows=>{:id=>options.delete(:id), :class=>options.delete(:class)}), &block
+  end
+  
   def method_missing method_name, *args, &block
-    case method_name.to_s
+    case method_name.to_sym
     when /^(container|row|(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_span)$/
-      self.grid($1, *args, &block)
-    when /^(one|two|three|four|six|twelve)_col_row$/
-      self.col($1, *args, &block)
-    when /^(one|two|three|four|six|twelve)_col_container$/
-      self.rows($1, *args, &block)
+      self.grid($1.to_sym, *args, &block)
+    when /^(one|two|three|four|six|twelve)_cols?_container$/
+      self.cols_container($1.to_sym, *args, &block)
+    when /^(one|two|three|four|six|twelve)_spans?_container$/
+      self.spans_container($1.to_sym, *args, &block)
     else super
     end
   end
@@ -71,10 +126,11 @@ module GridHelper
   def respond_to? method_name, include_private = false
     case method_name.to_s
     when  /^(container|row|(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_span)$/, 
-          /^(one|two|three|four|six|twelve)_col_row$/,
-          /^(one|two|three|four|six|twelve)_col_container$/
+          /^(one|two|three|four|six|twelve)_cols?_container$/,
+          /^(one|two|three|four|six|twelve)_spans?_container$/
       true
     else super
     end
   end
+
 end

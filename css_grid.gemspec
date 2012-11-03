@@ -4,7 +4,7 @@ require File.expand_path('../lib/css_grid/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Thomas Petrachi"]
   gem.email         = ["thomas.petrachi@vodeclic.com"]
-  gem.description   = %q{Provide CSS grid stylesheet, plus several helpers}
+  gem.description   = %q{Provide CSS grid stylesheet and CSS grid helpers}
   gem.summary       = %q{grid.css and GridHelper module}
   gem.homepage      = "https://github.com/petrachi/css_grid"
 
