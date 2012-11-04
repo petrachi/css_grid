@@ -1,20 +1,20 @@
+$gutter_width: 1.35;
+
 @mixin span($full, $col_num) { 
-	width: (($col_num / 12) * 100 - 1.74 * 2) / 100 * $full; 
-	margin: 0 (1.74 / 100 * $full); 
+	width: (($col_num / 12) * 100 - $gutter_width * 2) / 100 * $full; 
+	margin: 0 ($gutter_width / 100 * $full); 
 	float: left; min-height: 1px;
 }
 
-@mixin prepend($full, $col_num) { margin-left: (($col_num / 12) * 100 - 1.74 * 2) / 100 * $full + (1.74 * 3 / 100 * $full); }
-@mixin append($full, $col_num) { margin-right: (($col_num / 12) * 100 - 1.74 * 2) / 100 * $full + (1.74 * 3 / 100 * $full); }
-
-@mixin nested($grid_width){ margin: 0 (-1.74 / 100 * $grid_width); min-width: 0; }
+@mixin prepend($full, $col_num) { margin-left: (($col_num / 12) * 100 - $gutter_width * 2) / 100 * $full + ($gutter_width * 3 / 100 * $full); }
+@mixin append($full, $col_num) { margin-right: (($col_num / 12) * 100 - $gutter_width * 2) / 100 * $full + ($gutter_width * 3 / 100 * $full); }
 
 @mixin grid($grid_width){
 	.container { 
 		.row { 
 			width: $grid_width; margin: 0 auto; overflow: hidden; 
 			
-			&.nested{ margin: 0 (-1.74 / 100 * $grid_width); min-width: 0; width: auto; }
+			&.nested{ margin: 0 (-$gutter_width / 100 * $grid_width); min-width: 0; width: auto; }
 			
 			.one_span { @include span($grid_width, 1); } /* 55px */
 			.two_span { @include span($grid_width, 2); } /* 150px */
