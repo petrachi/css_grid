@@ -100,70 +100,66 @@ You can call 'container', 'row' or '*_span' functions that create the correspond
 
 Code
 
-erb code
 ```erb
 	<%= container do %>
 		<!-- some html -->
 	<% end %>
 ```
 
-will produce
 ```html
 	<div class="container">
 		<!-- some html -->
 	</div>
 ```
 
+--
+
 You can pass specific html ids or class as arguments
 
-erb code
 ```erb
 	<%= row :class=>:some_class do %>
 		<!-- some html -->
 	<% end %>
 ```
 
-will produce
 ```html
 	<div class="row some_class">
 		<!-- some html -->
 	</div>
 ```
 
+--
+
 You can also pass 'prepend' or 'append as an argument for the '*_span' helpers. Prepend will slide the column to the left. Append will slide the next column to the left.
 
-erb code
 ```erb
 	<%= four_span :prepend=>2 do %>
 		<!-- some html -->
 	<% end %>
 ```
 
-will produce
 ```html
 	<div class="four_span prepend_two">
 		<!-- some html -->
 	</div>
 ```
 
-
-erb code
 ```erb
 	<%= four_span :append=>1 do %>
 		<!-- some html -->
 	<% end %>
 ```
 
-will produce
 ```html
 	<div class="four_span append_one">
 		<!-- some html -->
 	</div>
 ```
 
+--
+
 If you want to use rows inside *_spans tags, you can use :nested option.
 
-erb code
 ```erb
 	<%= four_span do %>
 		<%= row :nested => true do %>
@@ -178,7 +174,6 @@ erb code
 	<% end %>
 ```
 
-will produce
 ```html
 	<div class="four_span">
 		<div class="row nested">
@@ -198,7 +193,7 @@ will produce
 GridHelper allow you to create severals columns in one time. And include them directly into row or container.
 
 There is my collection
-```yml
+```ruby
 	@collection = [Enumerable, Array, String].inject([]){ |collection, klass| 
 		collection << {:name=>klass.name, :methods=>"#{ klass.methods.count } methods"} 
 	}
@@ -236,9 +231,11 @@ It will create an grid structure using four_spans (three columns on a twelve gri
 	</section>
 ```
 
-If you'r more comfortable by telling width of spans istead of the nurmber of columns to use, you can use *_span_container the exact same way than *_col_container.
+Screenshot
+![css_grid normal](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/normal.png)
 
-To create the same output as previously, just call
+
+If you'r more comfortable by telling width of spans istead of the nurmber of columns to use, you can use *_span_container the exact same way than *_col_container. To create the same output as previously, call :
 ```erb
 	<%= four_spans_container :collection=>@collection do |elt| %>
 		Class : <%= elt[:name] %><br/>
@@ -308,7 +305,7 @@ Examples :
 	</section>
 ```
 
-![css_grid normal](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/nested.png)
+![css_grid nested](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/nested.png)
 
 --
 
@@ -340,6 +337,9 @@ Examples :
 	</section>
 ```
 
+![css_grid disable](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/disable.png)
+
+--
 
 
 ```erb
@@ -368,6 +368,9 @@ Examples :
 	</section>
 ```
 
+![css_grid prepend](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/prepend.png)
+
+--
 
 
 ```erb
@@ -427,6 +430,9 @@ Examples :
 	</section>
 ```
 
+![css_grid menu](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/menu.png)
+
+--
 
 
 ```erb
@@ -445,6 +451,9 @@ Examples :
 	</section>
 ```
 
+![css_grid one_col_row](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/one_col_row.png)
+
+--
 
 
 ```erb
@@ -532,28 +541,11 @@ Examples :
 	</section>
 ```
 
+![css_grid multi_nested](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/multi_nested.png)
 
+--
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Future ameliorations
+## To Do
 
 I made a constant to personalize created elements to fit a different grid stylesheet.
 Today this variable looks like this
@@ -572,7 +564,7 @@ Today this variable looks like this
 	                }
 ```
 
-I want to test it with the most commons versions of the css grid (twitter bootstrap for example) and provide correct config variable.
+Need to test it with the most commons versions of grid stylesheets (twitter bootstrap for example) and provide correct config variable.
 
 ## Contributing
 
