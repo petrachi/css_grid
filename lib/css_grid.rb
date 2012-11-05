@@ -3,7 +3,7 @@ require "css_grid/engine"
 
 module GridHelper
   TWELVE_STRING_INTS = { :one => 1, :two => 2, :three => 3, :four => 4, :five => 5, :six => 6, 
-                         :seven => 7, :eight => 8, :nine => 9, :ten => 10, :evelen => 11, :twelve => 12 }
+                         :seven => 7, :eight => 8, :nine => 9, :ten => 10, :eleven => 11, :twelve => 12 }
   TWELVE_STRING_INTS_INVERT = TWELVE_STRING_INTS.invert
   
   
