@@ -7,8 +7,8 @@ module GridHelper
   TWELVE_STRING_INTS_INVERT = TWELVE_STRING_INTS.invert
   
   
-  GRID_CONFIG = { :classes => Hash.new{ |hash, key| hash[key] = key }, 
-                  :elements => Hash.new(:div).merge(:container => :section) }
+  GRID_CONFIG ||= { :classes => Hash.new{ |hash, key| hash[key] = key }, 
+                    :elements => Hash.new(:div).merge(:container => :section) }
   
   def initialize *args
     @nested_stack = []
@@ -111,13 +111,14 @@ module GridHelper
     cols_container :one, options.merge(:disable=>:container, :rows=>{:id=>options.delete(:id), :class=>options.delete(:class)}), &block
   end
   
+  TWELVE_FOR_REGEXP = TWELVE_STRING_INTS.keys.join '|'
   def method_missing method_name, *args, &block
     case method_name.to_sym
-    when /^(container|row|(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_span)$/
+    when /^(container|row|(#{ TWELVE_FOR_REGEXP })_span)$/
       self.grid($1.to_sym, *args, &block)
-    when /^(one|two|three|four|six|twelve)_cols?_container$/
+    when /^(#{ TWELVE_FOR_REGEXP })_cols?_container$/
       self.cols_container($1.to_sym, *args, &block)
-    when /^(one|two|three|four|six|twelve)_spans?_container$/
+    when /^(#{ TWELVE_FOR_REGEXP })_spans?_container$/
       self.spans_container($1.to_sym, *args, &block)
     else super
     end
@@ -125,9 +126,9 @@ module GridHelper
   
   def respond_to? method_name, include_private = false
     case method_name.to_s
-    when  /^(container|row|(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_span)$/, 
-          /^(one|two|three|four|six|twelve)_cols?_container$/,
-          /^(one|two|three|four|six|twelve)_spans?_container$/
+    when  /^(container|row|(#{ TWELVE_FOR_REGEXP })_span)$/, 
+          /^(#{ TWELVE_FOR_REGEXP })_cols?_container$/,
+          /^(#{ TWELVE_FOR_REGEXP })_spans?_container$/
       true
     else super
     end

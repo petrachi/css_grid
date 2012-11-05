@@ -6,10 +6,6 @@ __Grid__ is a 12 column alignment system, based on 1140px width. That fit for 12
 
 __Helpers__ facilitate the use of the grid syntax, to produce correct html markdown. This allow you to pass collections and block, and map the result to insert it into correct html tags.
 
-## Version
-
-Current Version is 2.0.0. This doc is about 1.0.0. Update will be realease soon
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -134,131 +130,153 @@ will produce
 	</div>
 ```
 
---
+You can also pass 'prepend' or 'append as an argument for the '*_span' helpers. Prepend will slide the column to the left. Append will slide the next column to the left.
+
 erb code
 ```erb
-	<%= six_span :id=>:some_id, :class=>"class_one class_two" do %>
+	<%= four_span :prepend=>2 do %>
 		<!-- some html -->
 	<% end %>
 ```
 
 will produce
 ```html
-	<div class="six_span class_one class_two" id="some_id">
+	<div class="four_span prepend_two">
 		<!-- some html -->
 	</div>
 ```
 
-You can also pass 'offset' as an argument for the '*_span' helpers. Offset will slide the column to the left. (like you insert a empty *_span before)
 
 erb code
 ```erb
-	<%= four_span :offset=>:two do %>
+	<%= four_span :append=>1 do %>
 		<!-- some html -->
 	<% end %>
 ```
 
 will produce
 ```html
-	<div class="four_span offset_two">
+	<div class="four_span append_one">
 		<!-- some html -->
 	</div>
 ```
 
---
+If you want to use rows inside *_spans tags, you can use :nested option.
+
 erb code
 ```erb
-	<%= four_span :offset=>2 do %>
-		<!-- some html -->
+	<%= four_span do %>
+		<%= row :nested => true do %>
+			<%= two_span do %>
+				<!-- some html -->
+			<% end %>
+			
+			<%= two_span do %>
+				<!-- some other html -->
+			<% end %>
+		<% end %>
 	<% end %>
 ```
 
 will produce
 ```html
-	<div class="four_span offset_two">
-		<!-- some html -->
+	<div class="four_span">
+		<div class="row nested">
+			<div class="two_span">
+				<!-- some html -->
+			</div>
+			
+			<div class="two_span">
+				<!-- some other html -->
+			</div>
+		</div>
 	</div>
 ```
 
 #### Collections
 
-The most interesting part if you ask me! 
 GridHelper allow you to create severals columns in one time. And include them directly into row or container.
 
-Imagine I have this yml file
+There is my collection
 ```yml
-	en:
-		array:
-			name: Array
-			description: It's an array !
-			
-		hash:
-			name: Hash
-			descrption: I love hash, it's so fun !
-			
-		string:
-			name: Text
-			description: Just read the text.
+	@collection = [Enumerable, Array, String].inject([]){ |collection, klass| 
+		collection << {:name=>klass.name, :methods=>"#{ klass.methods.count } methods"} 
+	}
+	
+	@large_collection = [Hash, Set, Fixnum, Float, NilClass, TrueClass].inject([]){ |collection, klass| 
+		collection << {:name=>klass.name, :methods=>"#{ klass.methods.count } methods"} 
+	}
 ```
 
-I can do in my view
+I can call *_col_container with a :collection option
 ```erb
-	<%= two_col_container :collection=>[:array, :hash, :string] do |i18n_key| %>
-		<h2><%=t "#{ i18n_key }.name" %></h2>
-		<p><%=t "#{ i18n_key }.description" %></p>
+	<%= three_cols_container :collection=>@collection do |elt| %>
+		Class : <%= elt[:name] %><br/>
+		Detail : <%= elt[:methods] %>
 	<% end %>
 ```
 
-This will use two col per row (so six_span width), yield the block for each element, and place them into correct rows / container
-So the produced html will be
+It will create an grid structure using four_spans (three columns on a twelve grid).
 ```html
-	<div class="container">
-		<div class="row">
-			<div class="six_span">
-				<h2>Array</h2>
-				<p>It's an array !</p>
+	<section class="container ">
+		<div class="row ">
+			<div class="four_span ">
+				Class : Enumerable<br>
+				Detail : 163 methods
 			</div>
-			<div class="six_span">
-				<h2>Hash</h2>
-				<p>I love hash, it's so fun !</p>
+			<div class="four_span ">
+				Class : Array<br>
+				Detail : 178 methods
 			</div>
-		</div>
-		
-		<div class="row">
-			<div class="six_span">
-				<h2>Text</h2>
-				<p>Just read the text.</p>
+			<div class="four_span ">
+				Class : String<br>
+				Detail : 177 methods
 			</div>
 		</div>
-	</div>
+	</section>
 ```
 
-So You can play easily with grid and your collections. Users.all for example ;)
+If you'r more comfortable by telling width of spans istead of the nurmber of columns to use, you can use *_span_container the exact same way than *_col_container.
 
---
-If you just want to create a single row, you can just do 
+To create the same output as previously, just call
 ```erb
-	<%= four_col_row :collection=>[1, 2, 3, 4], :id=>:count_style do |i| %>
-		<p>count <%= i %></p>
+	<%= four_spans_container :collection=>@collection do |elt| %>
+		Class : <%= elt[:name] %><br/>
+		Detail : <%= elt[:methods] %>
 	<% end %>
 ```
 
-will use four col per row (so three_span width), will produce
+Note that *_col_container and *_span_container can also be called *_cols_container and *_spans_container. They respond to the following regexp : 
+````ruby
+	/^(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_cols?_container$/
+	/^(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_spans?_container$/
+```
+
+Here is a list of options you can use. Following exemples.
+* :id => String or Symbol - set the id attribute for the container.
+* :class => String or Symbol - set the class attribute for the container.
+* :nested => :spans - allow to use *_span tags directly inside the block passed by.
+* :disable => :spans or :container or [:spans, :container] - disable automatic creation of *_spans tags, or container tag, or both, allow you to handle this part manually.
+* :spans => Hash (authorized keys are :id, :class, :prepend, :append) - pass by options to automatic created *_spans tags.
+* :rows => Hash (authorized keys are :id, :class, :nested) - pass by options to automatic created rows tags.
+
+
+Note that : 
+* :nested also accept :container as a value (works the same way as :disable). It allows to use *_col_container inside a *_span tag. :nested_with => Integer must be informed in that case, telling the width of the span you'r in.
+* the GridHelper automaticly calculate if you are in a nested container and pass options :nested=>:container and :nested_width on his own. So you normaly don't have to care about that.
+
+
+Shortcuts : 
+* one_col_row method create a row with a full with span inside (usualy twelve_span, but this can change if you'r in nested container).
+* options :disable and :rows will be ignore, and options :id and :class will be directly applied to the row tag.
+
+Examples : 
+```erb
+	
+```
+
 ```html
-	<div class="row count_style">
-		<div class="three_span">
-			<p>count 1</p>
-		</div>
-		<div class="three_span">
-			<p>count 2</p>
-		</div>
-		<div class="three_span">
-			<p>count 3</p>
-		</div>
-		<div class="three_span">
-			<p>count 4</p>
-		</div>
-	</div>
+	
 ```
 
 FYI: 'id' and 'class' options can also be used for *_col_ccontainer and *_col_row, wich is applied to the container / row
@@ -266,27 +284,24 @@ FYI: 'id' and 'class' options can also be used for *_col_ccontainer and *_col_ro
 
 ## Future ameliorations
 
-I will add the possibility, in *_col_container, to use several *_span for the same object.
-I think this will be great, forms for example.
-
-```html
-	<div class="row">
-		<div class="three_span">
-			<label>Email</label>
-		</div>
-		<div class="nine_span">
-			<input id="email">
-		</div>
-	</div>
+I made a customizable global variable to personalize created elements to fit a different grid stylesheet.
+Today this variable looks like this
+```ruby
+	GRID_CONFIG = { :classes => { :container => :container,
+	                                :row => :row, :nested => :nested,                                                                                                  
+	                                :prepend => :prepend, :append => :append,                                                                                              
+	                                :one_span => :one_span, :two_span => :two_span, :three_span => :three_span, :four_span => :four_span,                                  
+	                                :five_span => :five_span, :six_span => :six_span, :seven_span => :seven_span, :eight_span => :eight_span,                              
+	                                :nine_span => :nine_span, :ten_span => :ten_span, :eleven_span => :eleven_span, :twelve_span => :twelve_span },
+	                  :elements => {:container => :section,
+	                                :row => :div,                                                                                              
+	                                :one_span => :div, :two_span => :div, :three_span => :div, :four_span => :div,                                  
+	                                :five_span => :div, :six_span => :div, :seven_span => :div, :eight_span => :div,                              
+	                                :nine_span => :div, :ten_span => :div, :eleven_span => :div, :twelve_span => :div}
+	                }
 ```
 
-by passing
-```erb
-	<%= twelve_col_container :collection=>[:email], :auto_span=>:disabled do |field| %>
-		<%= three_span{ label_tag field }%>
-		<%= nine_span{ text_field_tag field }%>
-	<% end %>
-```
+I want to test it with the most commons versions of the css grid (twitter bootstrap for example) and provide correct config variable.
 
 ## Contributing
 
