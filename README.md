@@ -308,7 +308,7 @@ Examples :
 	</section>
 ```
 
-![css_grid normal](/path/to/img.jpg "Optional title")
+![css_grid normal](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/nested.png)
 
 --
 
