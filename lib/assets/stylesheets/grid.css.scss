@@ -1,4 +1,4 @@
-$gutter_width: 1.35;
+$gutter_width: 1.041666666666;
 
 @mixin span($full, $col_num) { 
 	width: (($col_num / 12) * 100 - $gutter_width * 2) / 100 * $full; 
@@ -58,28 +58,28 @@ $gutter_width: 1.35;
 	}
 }
 
-
+/* Screens 1151px to Infinite */
 @media all {
-	@include grid(1140px);
-	
+	@include grid(1152px);
+
 	.container { 
 		img, object, embed { max-width: 100%; }
 		img { height: auto; }
 	}
 }	
-	
 
-/* Screens 980px to 1140px */
-@media only screen and (max-width: 1139px) {
-	@include grid(980px);	
+
+/* Screens 960px to 1151px */
+@media only screen and (max-width: 1151px) {
+	@include grid(960px);
 }
 
 
-/* Screens 768px to 979px */
-@media only screen and (max-width: 979px) {
+/* Screens 768px to 959px */
+@media only screen and (max-width: 959px) {
 	body { font-size: 0.8em; line-height: 1.5em; }
-	
-	@include grid(760px);	
+
+	@include grid(768px);	
 }
 
 

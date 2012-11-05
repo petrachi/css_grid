@@ -257,8 +257,8 @@ Here is a list of options you can use. Following exemples.
 * :class => String or Symbol - set the class attribute for the container.
 * :nested => :spans - allow to use *_span tags directly inside the block passed by.
 * :disable => :spans or :container or [:spans, :container] - disable automatic creation of *_spans tags, or container tag, or both, allow you to handle this part manually.
-* :spans => Hash (authorized keys are :id, :class, :prepend, :append) - pass by options to automatic created *_spans tags.
-* :rows => Hash (authorized keys are :id, :class, :nested) - pass by options to automatic created rows tags.
+* :spans => Hash (authorized keys are :class, :prepend, :append) - pass by options to automatic created *_spans tags.
+* :rows => Hash (authorized keys are :class and :nested) - pass by options to automatic created rows tags.
 
 
 Note that : 
@@ -272,19 +272,290 @@ Shortcuts :
 
 Examples : 
 ```erb
-	
+	<%= three_cols_container :id=>"nested", :collection=>@collection, :nested=>:spans do |elt| %>
+		<%= two_span do %>
+			Class : <%= elt[:name] %>
+		<% end %>
+
+		<%= two_span do %>
+			Detail : <%= elt[:methods] %>
+		<% end %>
+	<% end %>
 ```
 
 ```html
-	
+	<section class="container " id="nested">
+		<div class="row ">
+			<div class="four_span ">
+				<div class="row  nested">
+					<div class="two_span ">Class : Enumerable</div>	
+					<div class="two_span ">Detail : 163 methods</div>
+				</div>
+			</div>
+			<div class="four_span ">
+				<div class="row  nested">
+					<div class="two_span ">Class : Array</div>	
+					<div class="two_span ">Detail : 178 methods</div>
+				</div>
+			</div>
+			<div class="four_span ">
+				<div class="row  nested">
+					<div class="two_span ">Class : String</div>	
+					<div class="two_span ">Detail : 177 methods</div>
+				</div>
+			</div>
+		</div>
+	</section>
 ```
 
-FYI: 'id' and 'class' options can also be used for *_col_ccontainer and *_col_row, wich is applied to the container / row
+![css_grid normal](/path/to/img.jpg "Optional title")
+
+--
+
+
+```erb
+	<%= three_cols_container :id=>"disable_spans", :collection=>@collection, :disable=>:spans do |elt| %>
+		<%= two_span do %>
+			Class : <%= elt[:name] %>
+		<% end %>
+
+		<%= two_span do %>
+			Detail : <%= elt[:methods] %>
+		<% end %>
+	<% end %>
+```
+
+```html
+	<section class="container " id="disable_spans">
+		<div class="row ">
+			<div class="two_span ">Class : Enumerable</div>	
+			<div class="two_span ">Detail : 163 methods</div>
+			
+			<div class="two_span ">Class : Array</div>	
+			<div class="two_span ">Detail : 178 methods</div>
+			
+			<div class="two_span ">Class : String</div>	
+			<div class="two_span ">Detail : 177 methods</div>
+		</div>
+	</section>
+```
+
+
+
+```erb
+	<%= three_cols_container :id=>"prepend", :collection=>@collection, :spans=>{:prepend=>2} do |elt| %>
+		Class : <%= elt[:name] %><br/>
+		Detail : <%= elt[:methods] %>
+	<% end %>
+```
+
+```html
+	<section class="container " id="prepend">
+		<div class="row ">
+			<div class="two_span  prepend_two">
+				Class : Enumerable<br>
+				Detail : 163 methods
+			</div>
+			<div class="two_span  prepend_two">
+				Class : Array<br>
+				Detail : 178 methods
+			</div>
+			<div class="two_span  prepend_two">
+				Class : String<br>
+				Detail : 177 methods
+			</div>
+		</div>
+	</section>
+```
+
+
+
+```erb
+	<%= one_cols_container :disable=>:spans do %>
+
+		<%= three_span :id=>:menu do %>
+			Menu
+		<% end %>
+
+		<%= nine_span :id=>:content do %>
+			<%= three_cols_container :id=>"nested_container", :collection=>@large_collection do |elt| %>
+				Class : <%= elt[:name] %><br/>
+				Detail : <%= elt[:methods] %>
+			<% end %>
+		<% end %>
+	<% end %>
+```
+
+```html
+	<section class="container ">
+		<div class="row ">
+			<div class="three_span " id="menu">Menu</div>
+				
+			<div class="nine_span " id="content">
+				<section class="container " id="nested_container">
+					<div class="row  nested">
+						<div class="three_span ">
+							Class : Hash<br>
+							Detail : 178 methods
+						</div>
+						<div class="three_span ">
+							Class : Set<br>
+							Detail : 176 methods
+						</div>
+						<div class="three_span ">
+							Class : Fixnum<br>
+							Detail : 174 methods
+						</div>
+					</div>
+					<div class="row  nested">
+						<div class="three_span ">
+							Class : Float<br>
+							Detail : 174 methods
+						</div>
+						<div class="three_span ">
+							Class : NilClass<br>
+							Detail : 175 methods
+						</div>
+						<div class="three_span ">
+							Class : TrueClass<br>
+							Detail : 174 methods
+						</div>
+					</div>
+				</section>		
+			</div>
+		</div>
+	</section>
+```
+
+
+
+```erb
+	<%= container do %>
+		<%= one_col_row :id=>:one_row do %>
+			shortcut for row + twelve_span
+		<% end %>
+	<% end %>
+```
+
+```html
+	<section class="container ">
+		<div class="row " id="one_row">
+			<div class="twelve_span ">shortcut for row + twelve_span</div>
+		</div>
+	</section>
+```
+
+
+
+```erb
+	<%= one_col_container :id=>"multi_nested", :nested=>:spans do %>
+		<%= four_span :id=>:menu do %>
+			Menu
+		<% end %>
+
+		<%= eight_span do %>
+			<%= two_col_container :collection=>@large_collection do |elt| %>
+				<%= two_col_container(:collection=>elt.values){ |val| val } %>
+			<% end %>
+		<% end %>
+	<% end %>
+```
+
+```html
+	<section class="container " id="multi_nested">
+		<div class="row ">
+			<div class="twelve_span ">
+				<div class="row  nested">
+					<div class="four_span " id="mena">Menu</div>
+					
+					<div class="eight_span ">
+						<section class="container ">
+							<div class="row  nested">
+								<div class="four_span ">
+									<section class="container ">
+										<div class="row  nested">
+											<div class="two_span ">Hash</div>
+											<div class="two_span ">178 methods</div>
+										</div>
+									</section>
+								</div>
+								<div class="four_span ">
+									<section class="container ">
+										<div class="row  nested">
+											<div class="two_span ">Set</div>
+											<div class="two_span ">176 methods</div>
+										</div>
+									</section>
+								</div>
+							</div>
+							<div class="row  nested">
+								<div class="four_span ">
+									<section class="container ">
+										<div class="row  nested">
+											<div class="two_span ">Fixnum</div>
+											<div class="two_span ">174 methods</div>
+										</div>
+									</section>
+								</div>
+								<div class="four_span ">
+									<section class="container ">
+										<div class="row  nested">
+											<div class="two_span ">Float</div>
+											<div class="two_span ">174 methods</div>
+										</div>
+									</section>
+								</div>
+							</div>
+							<div class="row  nested">
+								<div class="four_span ">
+									<section class="container ">
+										<div class="row  nested">
+											<div class="two_span ">NilClass</div>
+											<div class="two_span ">175 methods</div>
+										</div>
+									</section>
+								</div>
+								<div class="four_span ">
+									<section class="container ">
+										<div class="row  nested">
+											<div class="two_span ">TrueClass</div>
+											<div class="two_span ">174 methods</div>
+										</div>
+									</section>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Future ameliorations
 
-I made a customizable global variable to personalize created elements to fit a different grid stylesheet.
+I made a constant to personalize created elements to fit a different grid stylesheet.
 Today this variable looks like this
 ```ruby
 	GRID_CONFIG = { :classes => { :container => :container,
