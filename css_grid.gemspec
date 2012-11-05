@@ -16,5 +16,4 @@ Gem::Specification.new do |gem|
   gem.version       = CssGrid::VERSION
   
   gem.add_dependency "railties", ">= 3.1.0"
-  gem.add_dependency "hash_extend"
 end
