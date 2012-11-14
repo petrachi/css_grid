@@ -16,7 +16,11 @@ module GridHelper
   end
   
   def grid tag, options = {}, &block
-    prepend = TWELVE_STRING_INTS_INVERT[options.delete :prepend]
+    prepend = if options[:prepend] > 0
+      TWELVE_STRING_INTS_INVERT[options.delete :prepend]
+    else
+      "minus_#{ TWELVE_STRING_INTS_INVERT[options.delete :prepend] }"
+    end
     append = TWELVE_STRING_INTS_INVERT[options.delete :append]
     
     warn "WARNING : argument ':nested' is not supported for '#{ tag }'" if options[:nested].present? and tag != :row
@@ -75,7 +79,11 @@ module GridHelper
           capture(elt, &block)
           
         else
-          grid("#{ span_width }_span".to_sym, options[:spans].clone) do
+          spans_options = options[:spans].clone
+          spans_options[:id] = spans_options[:id].call elt if spans_options[:id].class == Proc
+          spans_options[:class] = spans_options[:class].call elt if spans_options[:class].class == Proc
+          
+          grid("#{ span_width }_span".to_sym, spans_options) do
             safe_buffer = capture(elt, &block)
             safe_buffer = grid(:row, :nested=>true){ safe_buffer } if nested.include? :spans
             
@@ -84,7 +92,11 @@ module GridHelper
         end
       end
       
-      grid(:row, options[:rows].clone){ cols.reduce(:safe_concat) }
+      rows_options = options[:rows].clone
+      rows_options[:id] = rows_options[:id].call elt if rows_options[:id].class == Proc
+      rows_options[:class] = rows_options[:class].call elt if rows_options[:class].class == Proc
+      
+      grid(:row, rows_options){ cols.reduce(:safe_concat) }
     end
     
     safe_buffer = rows.reduce(:safe_concat)

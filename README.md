@@ -156,6 +156,21 @@ You can also pass 'prepend' or 'append as an argument for the '*_span' helpers. 
 	</div>
 ```
 
+Note that 'prepend' accept negative values
+
+```erb
+	<%= four_span :prepend=>-1 do %>
+		<!-- some html -->
+	<% end %>
+```
+
+```html
+	<div class="four_span minus_one">
+		<!-- some html -->
+	</div>
+```
+
+
 --
 
 If you want to use rows inside *_spans tags, you can use :nested option.
@@ -254,11 +269,13 @@ Here is a list of options you can use. Following exemples.
 * :class => String or Symbol - set the class attribute for the container.
 * :nested => :spans - allow to use *_span tags directly inside the block passed by.
 * :disable => :spans or :container or [:spans, :container] - disable automatic creation of *_spans tags, or container tag, or both, allow you to handle this part manually.
-* :spans => Hash (authorized keys are :class, :prepend, :append) - pass by options to automatic created *_spans tags.
-* :rows => Hash (authorized keys are :class and :nested) - pass by options to automatic created rows tags.
+* :spans => Hash (authorized keys are :id, :class, :prepend, :append) - pass by options to automatic created *_spans tags.
+* :rows => Hash (authorized keys are :id, :class and :nested) - pass by options to automatic created rows tags.
 
+Note :
+* You can use procs in :spans/:id, :spans/:class, :rows/:id and :rows/:class
 
-Note that : 
+Also : 
 * :nested also accept :container as a value (works the same way as :disable). It allows to use *_col_container inside a *_span tag. :nested_with => Integer must be informed in that case, telling the width of the span you'r in.
 * the GridHelper automaticly calculate if you are in a nested container and pass options :nested=>:container and :nested_width on his own. So you normaly don't have to care about that.
 
@@ -268,6 +285,37 @@ Shortcuts :
 * options :disable and :rows will be ignore, and options :id and :class will be directly applied to the row tag.
 
 Examples : 
+```erb
+	<%= three_cols_container :collection=>@collection, :rows=>{:id => Proc.new{ |elt| elt[:name].downcase }} do |elt| %>
+		<%= four_span do %>
+			Class : <%= elt[:name] %><br/>
+			Detail : <%= elt[:methods] %>
+		<% end %>
+	<% end %>
+```
+
+```html
+	<section class="container " id="nested">
+		<div class="row " id="enumerable">
+			<div class="four_span ">
+				Class : Enumerable<br/>
+				Detail : 163 methods
+			</div>
+			<div class="four_span " id="array">
+				Class : Array<br/>
+				Detail : 178 methods
+			</div>
+			<div class="four_span " id="string">
+				Class : String<br/>
+				Detail : 177 methods
+			</div>
+		</div>
+	</section>
+```
+
+--
+
+
 ```erb
 	<%= three_cols_container :id=>"nested", :collection=>@collection, :nested=>:spans do |elt| %>
 		<%= two_span do %>
