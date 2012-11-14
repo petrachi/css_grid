@@ -16,10 +16,12 @@ module GridHelper
   end
   
   def grid tag, options = {}, &block
-    prepend = if options[:prepend] > 0
-      TWELVE_STRING_INTS_INVERT[options.delete :prepend]
-    else
-      "minus_#{ TWELVE_STRING_INTS_INVERT[options.delete :prepend] }"
+    prepend = if options[:prepend].present? 
+      if options[:prepend] > 0
+        TWELVE_STRING_INTS_INVERT[options.delete :prepend]
+      else
+        "minus_#{ TWELVE_STRING_INTS_INVERT[options.delete :prepend] }"
+      end
     end
     append = TWELVE_STRING_INTS_INVERT[options.delete :append]
     
