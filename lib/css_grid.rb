@@ -38,7 +38,7 @@ module GridHelper
       unstack = false
     end
     
-    content_class = [GRID_CONFIG[:classes][tag], options.delete(:class)]
+    content_class = [GRID_CONFIG[:classes][tag], options.delete(:class)].compact
     content_class << "#{ GRID_CONFIG[:classes][:prepend] }_#{ prepend }" if prepend
     content_class << "#{ GRID_CONFIG[:classes][:append] }_#{ append }" if append
     content_class << GRID_CONFIG[:classes][:nested] if options.delete(:nested)
