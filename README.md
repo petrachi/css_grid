@@ -618,6 +618,10 @@ Need to test it with the most commons versions of grid stylesheets (twitter boot
 
 Add option to insert specified attributes in tags. Like 'itemprop', 'itemscope' or personal attribute, 'data-remote' for me ;) 
 
+--
+
+Preprend and Append are not fully handled by the GRID_CONFIG constant. Specialy prepend negative values
+
 ## Contributing
 
 1. Fork it
