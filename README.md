@@ -286,7 +286,7 @@ Shortcuts :
 
 Examples : 
 ```erb
-	<%= three_cols_container :collection=>@collection, :rows=>{:id => Proc.new{ |elt| elt[:name].downcase }} do |elt| %>
+	<%= three_cols_container :collection=>@collection, :spans=>{:id => Proc.new{ |elt| elt[:name].downcase }} do |elt| %>
 		<%= four_span do %>
 			Class : <%= elt[:name] %><br/>
 			Detail : <%= elt[:methods] %>
@@ -296,8 +296,8 @@ Examples :
 
 ```html
 	<section class="container " id="nested">
-		<div class="row " id="enumerable">
-			<div class="four_span ">
+		<div class="row ">
+			<div class="four_span " id="enumerable">
 				Class : Enumerable<br/>
 				Detail : 163 methods
 			</div>
