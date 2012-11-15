@@ -614,6 +614,10 @@ Today this variable looks like this
 
 Need to test it with the most commons versions of grid stylesheets (twitter bootstrap for example) and provide correct config variable.
 
+--
+
+Add option to insert specified attributes in tags. Like 'itemprop', 'itemscope' or personal attribute, 'data-remote' for me ;) 
+
 ## Contributing
 
 1. Fork it
