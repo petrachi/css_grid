@@ -622,6 +622,10 @@ Add option to insert specified attributes in tags. Like 'itemprop', 'itemscope' 
 
 Preprend and Append are not fully handled by the GRID_CONFIG constant. Specialy prepend negative values
 
+--
+
+Allow to specify the html tag we want to create. basicly it's div, except for container wich use section. An additional param in wich I can tell 'use header tag here, and article tag for that' would be nice
+
 ## Contributing
 
 1. Fork it
