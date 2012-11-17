@@ -43,7 +43,7 @@ module GridHelper
     content_class << "#{ GRID_CONFIG[:classes][:append] }_#{ append }" if append
     content_class << GRID_CONFIG[:classes][:nested] if options.delete(:nested)
     
-    safe_buffer = content_tag(GRID_CONFIG[:elements][tag], nil, :id => options.delete(:id), :class => content_class.join(" ") , &block)
+    safe_buffer = content_tag(options.delete(:element) || GRID_CONFIG[:elements][tag], nil, :id => options.delete(:id), :class => content_class.join(" ") , &block)
     
     @nested_stack.pop if unstack
     safe_buffer
