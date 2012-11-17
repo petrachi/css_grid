@@ -102,7 +102,7 @@ module GridHelper
     end
     
     safe_buffer = rows.reduce(:safe_concat)
-    safe_buffer = grid(:container, :id=>options.delete(:id), :class=>options.delete(:class)){ safe_buffer } unless disable.delete :container
+    safe_buffer = grid(:container, :id=>options.delete(:id), :class=>options.delete(:class), :element=>options.delete(:element)){ safe_buffer } unless disable.delete :container
     safe_buffer
   end
   
