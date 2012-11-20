@@ -16,6 +16,10 @@ module GridHelper
   end
   
   def grid tag, options = {}, &block
+    options.map_values! do |value|        
+      value.class == Proc ? value.call(@elt) : value 
+    end
+    
     prepend = if options[:prepend].present? 
       if options[:prepend] > 0
         TWELVE_STRING_INTS_INVERT[options.delete :prepend]
@@ -42,8 +46,9 @@ module GridHelper
     content_class << "#{ GRID_CONFIG[:classes][:prepend] }_#{ prepend }" if prepend
     content_class << "#{ GRID_CONFIG[:classes][:append] }_#{ append }" if append
     content_class << GRID_CONFIG[:classes][:nested] if options.delete(:nested)
-    
-    safe_buffer = content_tag(options.delete(:element) || GRID_CONFIG[:elements][tag], nil, :id => options.delete(:id), :class => content_class.join(" ") , &block)
+    options.merge! :class => content_class.join(" ")
+                                 
+    safe_buffer = content_tag(options.delete(:element) || GRID_CONFIG[:elements][tag], options, &block)
     
     @nested_stack.pop if unstack
     safe_buffer
@@ -76,16 +81,13 @@ module GridHelper
     
     rows = recollect(collection_length, options.delete(:collection) || [1]).map do |collection_mini|
       cols = collection_mini.map do |elt|
-
+        @elt = elt
+        
         if disable.include? :spans
           capture(elt, &block)
           
         else
-          spans_options = options[:spans].clone
-          spans_options[:id] = spans_options[:id].call elt if spans_options[:id].class == Proc
-          spans_options[:class] = spans_options[:class].call elt if spans_options[:class].class == Proc
-          
-          grid("#{ span_width }_span".to_sym, spans_options) do
+          grid("#{ span_width }_span".to_sym, options[:spans].clone) do
             safe_buffer = capture(elt, &block)
             safe_buffer = grid(:row, :nested=>true){ safe_buffer } if nested.include? :spans
             
@@ -93,16 +95,13 @@ module GridHelper
           end
         end
       end
-      
-      rows_options = options[:rows].clone
-      rows_options[:id] = rows_options[:id].call elt if rows_options[:id].class == Proc
-      rows_options[:class] = rows_options[:class].call elt if rows_options[:class].class == Proc
-      
-      grid(:row, rows_options){ cols.reduce(:safe_concat) }
+      @elt = nil
+
+      grid(:row, options[:rows].clone){ cols.reduce(:safe_concat) }
     end
     
     safe_buffer = rows.reduce(:safe_concat)
-    safe_buffer = grid(:container, :id=>options.delete(:id), :class=>options.delete(:class), :element=>options.delete(:element)){ safe_buffer } unless disable.delete :container
+    safe_buffer = grid(:container, options.except!(:spans, :rows)){ safe_buffer } unless disable.delete :container
     safe_buffer
   end
   

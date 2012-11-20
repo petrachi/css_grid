@@ -172,6 +172,22 @@ Note that 'prepend' accept negative values
 
 --
 
+You can add any attributes just like in content_tag. For example new html5 deta-* attributes.
+
+```erb
+	<%= six_span :'data-name'=>"Thomas Petrachi" do %>
+		<!-- some html -->
+	<% end %>
+```
+
+```html
+	<div class="six_span" data-name="Thomas Petrachi">
+		<!-- some html -->
+	</div>
+```
+
+--
+
 You can use the 'element' option to specify the html element wich will be created
 
 ```erb
@@ -288,7 +304,7 @@ Here is a list of options you can use. Following exemples.
 * :rows => Hash (authorized keys are :id, :class and :nested) - pass by options to automatic created rows tags.
 
 Note :
-* You can use procs in :spans/:id, :spans/:class, :rows/:id and :rows/:class
+* You can use procs in any option.
 
 Also : 
 * :nested also accept :container as a value (works the same way as :disable). It allows to use *_col_container inside a *_span tag. :nested_with => Integer must be informed in that case, telling the width of the span you'r in.
@@ -631,15 +647,7 @@ Need to test it with the most commons versions of grid stylesheets (twitter boot
 
 --
 
-Add option to insert specified attributes in tags. Like 'itemprop', 'itemscope' or personal attribute, 'data-remote' for me ;) 
-
---
-
 Preprend and Append are not fully handled by the GRID_CONFIG constant. Specialy prepend negative values.
-
---
-
-Add ArgumentErrors in helpers.
 
 ## Contributing
 

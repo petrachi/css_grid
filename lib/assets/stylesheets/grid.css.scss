@@ -3,7 +3,7 @@ $gutter_width: 1.041666666666;
 @mixin span($full, $col_num) { 
 	width: (($col_num / 12) * 100 - $gutter_width * 2) / 100 * $full; 
 	margin: 0 ($gutter_width / 100 * $full); 
-	float: left; min-height: 1px;
+	float: left;
 }
 
 @mixin prepend($full, $col_num) { margin-left: (($col_num / 12) * 100 - $gutter_width * 2) / 100 * $full + ($gutter_width * 3 / 100 * $full); }
