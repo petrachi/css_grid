@@ -649,14 +649,6 @@ Need to test it with the most commons versions of grid stylesheets (twitter boot
 
 Preprend and Append are not fully handled by the GRID_CONFIG constant. Specialy prepend negative values.
 
-## Bugfix comming soon
-
-Prepend with negative value doesn't work.
-
---
-
-class .row in the grid.css will be updated to delete 'overflow: hidden;' property
-
 ## Contributing
 
 1. Fork it

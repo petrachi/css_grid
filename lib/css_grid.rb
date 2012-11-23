@@ -20,21 +20,29 @@ module GridHelper
       value.class == Proc ? value.call(@elt) : value 
     end
     
-    prepend = if options[:prepend].present? 
-      if options[:prepend] > 0
-        TWELVE_STRING_INTS_INVERT[options.delete :prepend]
+    prepend = if options[:prepend].present? and TWELVE_STRING_INTS_INVERT.has_key? (prepend = options.delete(:prepend)).abs
+      if prepend > 0
+        "#{ GRID_CONFIG[:classes][:prepend] }_#{ TWELVE_STRING_INTS_INVERT[prepend] }"
       else
-        "minus_#{ TWELVE_STRING_INTS_INVERT[options.delete :prepend] }"
+        "#{ GRID_CONFIG[:classes][:minus] }_#{ TWELVE_STRING_INTS_INVERT[prepend.abs] }"
       end
+    elsif prepend
+      warn "WARNING : invalid value for ':prepend'"
     end
-    append = TWELVE_STRING_INTS_INVERT[options.delete :append]
+    
+    append = if options[:append].present? and TWELVE_STRING_INTS_INVERT.has_key? (append = options.delete(:append))
+      "#{ GRID_CONFIG[:classes][:append] }_#{ TWELVE_STRING_INTS_INVERT[options.delete :append] }"
+    elsif append
+      warn "WARNING : invalid value for ':append'"
+    end
+    
     
     warn "WARNING : argument ':nested' is not supported for '#{ tag }'" if options[:nested].present? and tag != :row
     
     if tag =~ /(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_span$/
-        @nested_stack << $1
+      @nested_stack << $1
         
-        unstack = true
+      unstack = true
     else
       warn "WARNING : argument ':prepend' is not supported for '#{ tag }'" if prepend.present?
       warn "WARNING : argument ':append' is not supported for '#{ tag }'" if append.present?
@@ -42,9 +50,7 @@ module GridHelper
       unstack = false
     end
     
-    content_class = [GRID_CONFIG[:classes][tag], options.delete(:class)].compact
-    content_class << "#{ GRID_CONFIG[:classes][:prepend] }_#{ prepend }" if prepend
-    content_class << "#{ GRID_CONFIG[:classes][:append] }_#{ append }" if append
+    content_class = [GRID_CONFIG[:classes][tag], options.delete(:class), prepend, append].compact
     content_class << GRID_CONFIG[:classes][:nested] if options.delete(:nested)
     options.merge! :class => content_class.join(" ")
                                  
