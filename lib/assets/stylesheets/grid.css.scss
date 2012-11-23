@@ -12,7 +12,7 @@ $gutter_width: 1.041666666666;
 @mixin grid($grid_width){
 	.container { 
 		.row { 
-			width: $grid_width; margin: 0 auto; overflow: hidden; 
+			width: $grid_width; margin: 0 auto; display: table; 
 			
 			&.nested{ margin: 0 (-$gutter_width / 100 * $grid_width); min-width: 0; width: auto; }
 			
