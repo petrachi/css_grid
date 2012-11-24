@@ -21,7 +21,8 @@ module GridHelper
       value.class == Proc ? value.call(@elt) : value 
     end
     
-    prepend = if options[:prepend].present? and TWELVE_STRING_INTS_INVERT.has_key? (prepend = options.delete(:prepend)).abs
+    prepend = options.delete :prepend
+    prepend = if prepend.present? and TWELVE_STRING_INTS_INVERT.has_key? prepend.abs
       if prepend > 0
         "#{ GRID_CONFIG[:classes][:prepend] }_#{ TWELVE_STRING_INTS_INVERT[prepend] }"
       else
@@ -31,7 +32,8 @@ module GridHelper
       warn "WARNING : invalid value for ':prepend'"
     end
     
-    append = if options[:append].present? and TWELVE_STRING_INTS_INVERT.has_key? (append = options.delete(:append))
+    append = options.delete :append
+    append = if append and TWELVE_STRING_INTS_INVERT.has_key? append
       "#{ GRID_CONFIG[:classes][:append] }_#{ TWELVE_STRING_INTS_INVERT[options.delete :append] }"
     elsif append
       warn "WARNING : invalid value for ':append'"

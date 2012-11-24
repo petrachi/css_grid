@@ -33,6 +33,15 @@ app/assets/stylesheets/application.css
 	 */
 ```
 
+#### Rails <= 3.0
+
+Add the following lines to your rakefile then run 'rake css:grid:setup' to copy 'grid.scss' to public/stylesheets
+```
+	require 'css_grid'
+	require 'css_grid/tasks'
+```
+
+
 ### Grid Helpers
 
 To use the methods helper provide, you need to include GridHelper
