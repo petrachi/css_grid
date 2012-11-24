@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Thomas Petrachi"]
   gem.email         = ["thomas.petrachi@vodeclic.com"]
   gem.description   = %q{Provide CSS grid stylesheet and CSS grid helpers}
-  gem.summary       = %q{grid.css.scss and GridHelper module}
+  gem.summary       = %q{stylesheet grid.scss and module GridHelper}
   gem.homepage      = "https://github.com/petrachi/css_grid"
 
   gem.files         = `git ls-files`.split($\)
@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "css_grid"
   gem.require_paths = ["lib"]
   gem.version       = CssGrid::VERSION
+  
+  gem.add_dependency "hash_extend"
 end
