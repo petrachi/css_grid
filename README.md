@@ -33,7 +33,7 @@ app/assets/stylesheets/application.css
 	 */
 ```
 
-#### Rails <= 3.0
+#### Rails <= 3.0 (or not using sass)
 
 Add the following lines to your rakefile then run 'rake css:grid:setup' to copy 'grid.css' to public/stylesheets
 ```
@@ -41,7 +41,7 @@ Add the following lines to your rakefile then run 'rake css:grid:setup' to copy 
 	require 'css_grid/tasks'
 ```
 
-Then include the grid.css file in your layout
+Then add '<%= stylesheet_link_tag "grid" %>' to your layout
 
 ### Grid Helpers
 

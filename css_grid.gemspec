@@ -15,6 +15,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = CssGrid::VERSION
   
-  gem.add_dependency 'sass-rails',   '~> 3.2.3'
   gem.add_dependency "hash_extend"
 end
