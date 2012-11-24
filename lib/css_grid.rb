@@ -133,7 +133,7 @@ module GridHelper
   
   TWELVE_FOR_REGEXP = TWELVE_STRING_INTS.keys.join '|'
   def method_missing method_name, *args, &block
-    case method_name.to_sym
+    case method_name.to_s
     when /^(container|row|(#{ TWELVE_FOR_REGEXP })_span)$/
       self.grid($1.to_sym, *args, &block)
     when /^(#{ TWELVE_FOR_REGEXP })_cols?_container$/
