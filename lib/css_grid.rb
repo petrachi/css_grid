@@ -1,5 +1,6 @@
 require "css_grid/version"
 require "css_grid/engine"
+require 'css_grid/railtie' if defined?(Rails)
 
 module GridHelper
   TWELVE_STRING_INTS = { :one => 1, :two => 2, :three => 3, :four => 4, :five => 5, :six => 6, 
@@ -152,5 +153,4 @@ module GridHelper
     else super
     end
   end
-
 end
