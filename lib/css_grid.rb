@@ -9,8 +9,8 @@ module GridHelper
   TWELVE_STRING_INTS_INVERT = TWELVE_STRING_INTS.invert
   
   
-  GRID_CONFIG ||= { :classes => Hash.new{ |hash, key| hash[key] = key }, 
-                    :elements => Hash.new(:div).merge(:container => :section) }
+  GRID_CONFIG = { :classes => Hash.new{ |hash, key| hash[key] = key }, 
+                  :elements => Hash.new(:div).merge(:container => :section) }
   
   def initialize *args
     @nested_stack = []
