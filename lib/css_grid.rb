@@ -1,6 +1,6 @@
 require "css_grid/version"
-require "css_grid/engine"
-require 'css_grid/railtie' if defined?(Rails)
+require "css_grid/engine" if Rails.version >= "3.1"
+require "css_grid/railtie" if Rails.version >= "3.0"
 
 module GridHelper
   
