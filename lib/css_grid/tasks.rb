@@ -5,9 +5,9 @@ namespace "css:grid" do
       "app/assets/stylesheets/"
     else
       "public/stylesheets"
-    end, "grid.scss")
+    end, "grid.css")
     
     # Copy stylesheet file to <tt>public/stylesheets/grid.scss</tt>.
-    FileUtils.cp(File.dirname(__FILE__) + "/../assets/stylesheets/grid.scss", stylesheet_file) unless Rails.version >= "3.1"
+    FileUtils.cp(File.dirname(__FILE__) + "/../../ressources/grid.css", stylesheet_file) unless Rails.version >= "3.1"
   end
 end

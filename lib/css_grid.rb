@@ -42,7 +42,7 @@ module GridHelper
     
     warn "WARNING : argument ':nested' is not supported for '#{ tag }'" if options[:nested].present? and tag != :row
     
-    if tag =~ /(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_span$/
+    if tag.to_s =~ /(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)_span$/
       @nested_stack << $1
         
       unstack = true
@@ -59,7 +59,7 @@ module GridHelper
                                  
     safe_buffer = content_tag(options.delete(:element) || GRID_CONFIG[:elements][tag], options, &block)
     
-    @nested_stack.pop if unstack
+    @nested_stack.pop if unstack    
     safe_buffer
   end
 
@@ -111,7 +111,7 @@ module GridHelper
     
     safe_buffer = rows.reduce(:safe_concat)
     safe_buffer = grid(:container, options.except!(:spans, :rows)){ safe_buffer } unless disable.delete :container
-    safe_buffer
+    Rails.version < "3" ? concat(safe_buffer) : safe_buffer
   end
   
   def spans_container span_width, options = {}, &block

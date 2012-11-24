@@ -35,12 +35,13 @@ app/assets/stylesheets/application.css
 
 #### Rails <= 3.0
 
-Add the following lines to your rakefile then run 'rake css:grid:setup' to copy 'grid.scss' to public/stylesheets
+Add the following lines to your rakefile then run 'rake css:grid:setup' to copy 'grid.css' to public/stylesheets
 ```
 	require 'css_grid'
 	require 'css_grid/tasks'
 ```
 
+Then include the grid.css file in your layout
 
 ### Grid Helpers
 
@@ -287,7 +288,7 @@ It will create an grid structure using four_spans (three columns on a twelve gri
 ```
 
 Screenshot
-![css_grid normal](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/normal.png)
+![css_grid normal](https://raw.github.com/petrachi/css_grid/master/ressources/readme/normal.png)
 
 
 If you'r more comfortable by telling width of spans istead of the nurmber of columns to use, you can use *_span_container the exact same way than *_col_container. To create the same output as previously, call :
@@ -393,7 +394,7 @@ Examples :
 	</section>
 ```
 
-![css_grid nested](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/nested.png)
+![css_grid nested](https://raw.github.com/petrachi/css_grid/master/ressources/readme/nested.png)
 
 --
 
@@ -425,7 +426,7 @@ Examples :
 	</section>
 ```
 
-![css_grid disable](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/disable.png)
+![css_grid disable](https://raw.github.com/petrachi/css_grid/master/ressources/readme/disable.png)
 
 --
 
@@ -456,7 +457,7 @@ Examples :
 	</section>
 ```
 
-![css_grid prepend](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/prepend.png)
+![css_grid prepend](https://raw.github.com/petrachi/css_grid/master/ressources/readme/prepend.png)
 
 --
 
@@ -518,7 +519,7 @@ Examples :
 	</section>
 ```
 
-![css_grid menu](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/menu.png)
+![css_grid menu](https://raw.github.com/petrachi/css_grid/master/ressources/readme/menu.png)
 
 --
 
@@ -539,7 +540,7 @@ Examples :
 	</section>
 ```
 
-![css_grid one_col_row](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/one_col_row.png)
+![css_grid one_col_row](https://raw.github.com/petrachi/css_grid/master/ressources/readme/one_col_row.png)
 
 --
 
@@ -629,7 +630,7 @@ Examples :
 	</section>
 ```
 
-![css_grid multi_nested](https://raw.github.com/petrachi/css_grid/master/lib/assets/images/readme/multi_nested.png)
+![css_grid multi_nested](https://raw.github.com/petrachi/css_grid/master/ressources/readme/multi_nested.png)
 
 --
 
