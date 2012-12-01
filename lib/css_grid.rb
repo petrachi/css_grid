@@ -62,14 +62,6 @@ module GridHelper
     @nested_stack.pop if unstack    
     safe_buffer
   end
-
-  def recollect size, collection
-    recollected = []
-    0.step(collection.size - 1, size) do |i|
-      recollected << collection[i..i + size - 1]
-    end
-    recollected
-  end
   
   def cols_container col_number, options = {}, &block
     options[:rows] ||= {}
@@ -88,7 +80,7 @@ module GridHelper
     collection_length = TWELVE_STRING_INTS[col_number]
     span_width = @span_width || TWELVE_STRING_INTS_INVERT[(options.delete(:nested_width) || 12) / (collection_length + (options[:spans][:prepend] || 0) + (options[:spans][:append] || 0))]
     
-    rows = recollect(collection_length, options.delete(:collection) || [1]).map do |collection_mini|
+    rows = (options.delete(:collection) || [1]).in_groups_of(collection_length, false) do |collection_mini|
       cols = collection_mini.map do |elt|
         @elt = elt
         
