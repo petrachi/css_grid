@@ -34,7 +34,7 @@ module GridHelper
     
     append = options.delete :append
     append = if append and TWELVE_STRING_INTS_INVERT.has_key? append
-      "#{ GRID_CONFIG[:classes][:append] }_#{ TWELVE_STRING_INTS_INVERT[options.delete :append] }"
+      "#{ GRID_CONFIG[:classes][:append] }_#{ TWELVE_STRING_INTS_INVERT[append] }"
     elsif append
       warn "WARNING : invalid value for ':append'"
     end
