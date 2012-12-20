@@ -6,6 +6,10 @@ __Grid__ is a 12 column alignment system, based on 1140px width. That fit for 12
 
 __Helpers__ facilitate the use of the grid syntax, to produce correct html markdown. This allow you to pass collections and block, and map the result to insert it into correct html tags.
 
+--
+
+Tested with Rails 3.2 + Ruby 1.9, Rails 2.3 + Ruby Enterprise (ree) 1.8.7
+
 ## Installation
 
 Add this line to your application's Gemfile:
