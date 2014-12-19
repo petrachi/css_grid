@@ -1,3 +1,8 @@
+# Deprecation notes
+
+This gem is no longer maintained.
+
+
 # CssGrid
 
 This Gem allow you to use a css grid, and provide several helpers.
